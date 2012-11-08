@@ -20,7 +20,7 @@ describe <%= class_name %> do
   end
 
   def self.attributes
-    [<%= attributes.map(&:field).map(&:to_sym).join(', ') %>]
+    [<%= attributes.map(&:name).map(&:to_sym).join(', ') %>]
   end
 
   def self.required_attributes
