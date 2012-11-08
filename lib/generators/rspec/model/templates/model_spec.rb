@@ -6,7 +6,7 @@ describe <%= class_name %> do
   end
 
   before(:each) do
-    @<%= class_name.underscore %> = FactoryGirl.create <%= class_name.underscore.to_sym %>
+    @<%= class_name.underscore %> = FactoryGirl.create :<%= class_name.underscore %>
   end
 
   subject{@<%= class_name.underscore %>}
@@ -20,7 +20,7 @@ describe <%= class_name %> do
   end
 
   def self.attributes
-    [<%= attributes.map(&:name).map(&:to_sym).join(', ') %>]
+    [<%= attributes.map(&:name).map{ |a| ":#{a}" }.join(', ') %>]
   end
 
   def self.required_attributes
@@ -68,7 +68,7 @@ describe <%= class_name %> do
       describe "#{c.capitalize}" do
         before(:each) do
           10.times do
-            subject.method(c).call << FactoryGirl.create(c.to_s.singularize.to_sym, <%= class_name.underscore.to_sym %> => subject)
+            subject.method(c).call << FactoryGirl.create(c.to_s.singularize.to_sym, :<%= class_name.underscore %> => subject)
           end
         end
 
