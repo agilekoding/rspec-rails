@@ -2,9 +2,6 @@ require 'spec_helper'
 
 <% module_namespacing do -%>
 describe <%= class_name %> do
-  before(:all) do
-  end
-
   before(:each) do
     @<%= class_name.underscore %> = FactoryGirl.create :<%= class_name.underscore %>
   end
@@ -19,68 +16,79 @@ describe <%= class_name %> do
      should be_valid
   end
 
-  def self.attributes
-    [<%= attributes.map(&:name).map{ |a| ":#{a}" }.join(', ') %>]
-  end
-
-  def self.required_attributes
-    []
-  end
-
-  attributes.each do |a|
-    it "should respond to #{a}" do
-      should respond_to(a)
+  # -----------------------------------------------------------------------------------------------------------------------
+  # RESPONSES
+  # -----------------------------------------------------------------------------------------------------------------------
+  describe "responses to" do
+    def self.instance_collections
+      [
+        attributtes = [<%= attributes.map(&:name).map{ |a| ":#{a}" }.join(', ') %>],
+        associations = [],
+        instance_methods = [],
+      ]
     end
 
-    it "should have no error on #{a.to_s}" do
-      should have(:no).error_on(a)
-    end
-  end if self.respond_to?(:attributes)
-
-  describe "Validations" do
-    required_attributes.each do |a|
-      it "should have 1 error without #{a.to_s}" do
-        subject.send "#{a.to_s}=", nil
-        should have_at_least(1).error_on(a)
-      end
-    end if self.respond_to?(:required_attributes)
-  end
-
-  describe "Belongs to" do
-    def self.parent_models
-      []
+    def self.class_collections
+      [
+        class_methods = [],
+        scopes = [],
+      ]
     end
 
-    attr_accessor *parent_models
-
-    parent_models.each do |p|
-      its(p) {should eq(method(p).call)}
-    end if self.respond_to?(:parent_models)
-
-  end
-
-  describe "Has Many" do
-    def self.model_collections
-      []
-    end
-
-    model_collections.each do |c|
-      describe "#{c.capitalize}" do
-        before(:each) do
-          10.times do
-            subject.method(c).call << FactoryGirl.create(c.to_s.singularize.to_sym, :<%= class_name.underscore %> => subject)
-          end
-        end
-
-        it "should have 10 #{c.capitalize}" do
-          should have(10).send(c)
-        end
+    instance_collections.flatten.each do |a|
+      it "#{a} should be valid" do
+        should respond_to(a)
       end
     end
 
+    class_collections.flatten.each do |a|
+      it "#{a} should be valid" do
+        <%= class_name %>.should respond_to(a)
+      end
+    end
   end
 
-  # Define more specific tests here
+  # -----------------------------------------------------------------------------------------------------------------------
+  # MODEL ATTRIBUTES
+  # -----------------------------------------------------------------------------------------------------------------------
+  describe "model attributes" do
+    <% attributes.map(&:name).map do |a| %>
+      describe "#{a}" do
+        <%= "# Here define the contexts and tests to #{a} attributes" %>
+      end
+    <% end %>
+  end
+
+  # -----------------------------------------------------------------------------------------------------------------------
+  # ASSOCIATIONS
+  # -----------------------------------------------------------------------------------------------------------------------
+  describe "associations" do
+    describe "belongs to" do
+      # Here define the tests to belongs to associations.
+    end
+
+    describe "has many" do
+      # Here define the tests to has many to associations.
+    end
+  end
+
+  # -----------------------------------------------------------------------------------------------------------------------
+  # INSTANCE METHODS
+  # -----------------------------------------------------------------------------------------------------------------------
+  describe "instance methods" do
+  end
+
+  # -----------------------------------------------------------------------------------------------------------------------
+  # CLASS METHODS
+  # -----------------------------------------------------------------------------------------------------------------------
+  describe "class methods" do
+  end
+
+  # -----------------------------------------------------------------------------------------------------------------------
+  # SCOPES
+  # -----------------------------------------------------------------------------------------------------------------------
+  describe "scopes" do
+  end
 
 end
 <% end -%>
