@@ -53,7 +53,7 @@ describe <%= class_name %> do
   # -----------------------------------------------------------------------------------------------------------------------
   describe "model attributes" do
     <% attributes.map(&:name).map do |a| %>
-      describe <%= "" + a + "" %> do
+      describe <%= "\"" + a + "\"" %> do
         <%= "# Here define the contexts and tests to #{a} attributes" %>
       end
     <% end %>
