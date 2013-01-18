@@ -56,7 +56,8 @@ describe <%= class_name %> do
   describe "model attributes" do<% attributes.map(&:name).map do |a| %>
     describe <%= "\"" + a + "\"" %> do
       <%= "# Here define the contexts and tests to #{a} attributes" %>
-    end<% end %>
+    end
+    <% end %>
   end
 
   # -----------------------------------------------------------------------------------------------------------------------
@@ -76,6 +77,12 @@ describe <%= class_name %> do
     describe "has many" do
       # Here define the tests to has many to associations.
     end
+  end
+
+  # -----------------------------------------------------------------------------------------------------------------------
+  # NESTED ATTRIBUTES
+  # -----------------------------------------------------------------------------------------------------------------------
+  describe "nested attributes" do
   end
 
   # -----------------------------------------------------------------------------------------------------------------------
